@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">pFood</string>
+    <string name="basket">Корзина</string>
+    <string name="profile">Профиль</string>
+    <string name="rating">Рейтинг</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_cart">Корзина</string>
+    <string name="menu">Меню</string>
+    <string name="order">Заказ:</string>
+    <string name="delivery">Доставка</string>
+    <string name="total">Итого</string>
+    <string name="delivery_address">Адрес доставки:</string>
+    <string name="payment">Оплата</string>
+    <string name="use_your_address">Введите ваш адрес</string>
+</resources>
