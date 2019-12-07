@@ -82,6 +82,17 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
                     AppSettings.getInstance().ivCircle.setVisibility(View.INVISIBLE);
                 }
 
+                if (!AppSettings.getInstance().foodCart.isEmpty()) {
+                    ViewGroup.LayoutParams lp = AppSettings.getInstance().foodListView.getLayoutParams();
+                    lp.height = 322 * AppSettings.getInstance().foodCart.size();
+                    AppSettings.getInstance().foodListView.setLayoutParams(lp);
+                }
+                else {
+                    ViewGroup.LayoutParams lp = AppSettings.getInstance().foodListView.getLayoutParams();
+                    lp.height = 0;
+                    AppSettings.getInstance().foodListView.setLayoutParams(lp);
+                }
+
                 notifyDataSetChanged();
             }
         });
@@ -90,6 +101,9 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
         tvCount.setText(Integer.toString(count));
         tvPrice.setText(fullPrice + "\u20BD");
         imageView.setImageResource(imageSource);
+        AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
+
+
 
         return convertView;
     }

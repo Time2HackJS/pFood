@@ -3,6 +3,7 @@ package com.example.pfood.Fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -50,9 +51,18 @@ public class CartFragment extends Fragment {
         foodListView = rootView.findViewById(R.id.listview_food);
         foodCartAdapter = new FoodCartAdapter(getActivity(), R.layout.foodcart_view_layout, AppSettings.getInstance().foodCart);
         foodListView.setAdapter(foodCartAdapter);
+        AppSettings.getInstance().foodListView = foodListView;
+
+        if (!AppSettings.getInstance().foodCart.isEmpty()) {
+            ViewGroup.LayoutParams lp = foodListView.getLayoutParams();
+            lp.height = 322 * AppSettings.getInstance().foodCart.size();
+            foodListView.setLayoutParams(lp);
+        }
 
         spinner.setPrompt("Выберите способ оплаты");
         spinner.setSelection(1);
+
+        getActivity().setTitle("Корзина");
 
 
         return rootView;

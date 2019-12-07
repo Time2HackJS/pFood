@@ -12,6 +12,7 @@ import com.example.pfood.Classes.AppSettings;
 import com.example.pfood.Fragments.CartFragment;
 import com.example.pfood.Fragments.FoodFragment;
 import com.example.pfood.Fragments.MenuFragment;
+import com.example.pfood.Fragments.RatingFragment;
 import com.example.pfood.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -98,7 +99,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 break;
 
             case R.id.nav_rating:
-
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                                R.anim.enter_left_to_right, R.anim.exit_left_to_right)
+                        .replace(R.id.fragment_container, new RatingFragment()).addToBackStack(null).commit();
                 break;
 
         }
