@@ -5,7 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,17 +43,98 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         Log.i("ADAPTER_TEST", "FOOD VIEWHOLDER CREATE");
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.cardview_item_category, parent, false);
+        view = mInflater.inflate(R.layout.cardview_food_category, parent, false);
 
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
         Log.i("ADAPTER_TEST", "FOOD ITEM INSERTED");
         holder.tv_name.setText(mData.get(position).getName());
         holder.iv_image.setImageResource(mData.get(position).getImageSource());
+        holder.bPrice.setText(mData.get(position).getPrice().toString());
+
+        if (AppSettings.getInstance().findCollectable(mData.get(position)) != null &&
+            AppSettings.getInstance().findCollectable(mData.get(position)).getFoodCount() != 0) {
+
+            holder.bAdd.setVisibility(View.VISIBLE);
+            holder.bRemove.setVisibility(View.VISIBLE);
+            holder.countText.setVisibility(View.VISIBLE);
+            holder.countLinear.setVisibility(View.VISIBLE);
+
+            holder.bPrice.setVisibility(View.INVISIBLE);
+
+            holder.countText.setText(AppSettings.getInstance().countOf(mData.get(position)).toString());
+        } else
+        {
+            holder.bAdd.setVisibility(View.INVISIBLE);
+            holder.bRemove.setVisibility(View.INVISIBLE);
+            holder.countText.setVisibility(View.INVISIBLE);
+            holder.countLinear.setVisibility(View.INVISIBLE);
+
+            holder.bPrice.setVisibility(View.VISIBLE);
+        }
+
+        holder.bAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppSettings.getInstance().findCollectable(mData.get(position)).incCount();
+                notifyDataSetChanged();
+
+                AppSettings.getInstance().tvNum.setVisibility(View.VISIBLE);
+                AppSettings.getInstance().ivCircle.setVisibility(View.VISIBLE);
+
+                Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.scale);
+                AppSettings.getInstance().tvNum.startAnimation(anim);
+
+                AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
+            }
+        });
+
+        holder.bRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppSettings.getInstance().findCollectable(mData.get(position)).decCount();
+                notifyDataSetChanged();
+
+                Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.scale_remove);
+                AppSettings.getInstance().tvNum.startAnimation(anim);
+
+                AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
+
+                if (AppSettings.getInstance().findCollectable(mData.get(position)) == null && AppSettings.getInstance().foodCart.isEmpty()) {
+                    AppSettings.getInstance().deleteCollectable(mData.get(position));
+
+                    AppSettings.getInstance().tvNum.setVisibility(View.INVISIBLE);
+                    AppSettings.getInstance().ivCircle.setVisibility(View.INVISIBLE);
+
+                    AppSettings.getInstance().tvNum.setText(" ");
+                }
+            }
+        });
+
+        holder.bPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FoodCollectable clickedFood = new FoodCollectable(mData.get(position), 1);
+                AppSettings.getInstance().fullNumPrice += mData.get(position).getPrice();
+                AppSettings.getInstance().foodCache.add(mData.get(position));
+                AppSettings.getInstance().foodCart.add(clickedFood);
+
+                AppSettings.getInstance().tvNum.setVisibility(View.VISIBLE);
+                AppSettings.getInstance().ivCircle.setVisibility(View.VISIBLE);
+
+                Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.scale);
+                AppSettings.getInstance().tvNum.startAnimation(anim);
+                AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
+
+                holder.countText.setText("1");
+
+                notifyDataSetChanged();
+            }
+        });
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,16 +158,24 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_name;
+        TextView tv_name, countText;
         ImageView iv_image;
         CardView cardView;
+        Button bPrice;
+        ImageButton bAdd, bRemove;
+        LinearLayout countLinear;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
+            countText = itemView.findViewById(R.id.count_text);
             tv_name = itemView.findViewById(R.id.category_name);
             iv_image = itemView.findViewById(R.id.category_image);
             cardView = itemView.findViewById(R.id.cardview_id);
+            bPrice = itemView.findViewById(R.id.button_price);
+            bAdd = itemView.findViewById(R.id.b_add);
+            bRemove = itemView.findViewById(R.id.b_remove);
+            countLinear = itemView.findViewById(R.id.count_linear);
         }
     }
 }

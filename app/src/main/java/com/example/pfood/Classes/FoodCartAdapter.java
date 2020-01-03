@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -52,11 +54,15 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
                     AppSettings.getInstance().fullNumPrice += f.getFullPrice();
                 }
 
-                AppSettings.getInstance().fullPrice.setText(Integer.toString(AppSettings.getInstance().fullNumPrice));
+                AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
                 AppSettings.getInstance().foodCount++;
-                AppSettings.getInstance().tvNum.setText(Integer.toString(AppSettings.getInstance().foodCount));
+
+                Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.scale);
+                AppSettings.getInstance().tvNum.startAnimation(anim);
+                AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
                 notifyDataSetChanged();
+                AppSettings.getInstance().foodAdapter.notifyDataSetChanged();
             }
         });
 
@@ -71,11 +77,16 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
                 }
 
                 AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
-                if (getItem(position).getFoodCount().equals(0))
+                if (getItem(position).getFoodCount().equals(0)) {
                     AppSettings.getInstance().foodCart.remove(getItem(position));
+                    AppSettings.getInstance().deleteCollectable(getItem(position));
+                }
 
                 AppSettings.getInstance().foodCount--;
-                AppSettings.getInstance().tvNum.setText(Integer.toString(AppSettings.getInstance().foodCount));
+
+                Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.scale_remove);
+                AppSettings.getInstance().tvNum.startAnimation(anim);
+                AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
                 if (AppSettings.getInstance().foodCount.equals(0)) {
                     AppSettings.getInstance().tvNum.setVisibility(View.INVISIBLE);
@@ -94,6 +105,7 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
                 }
 
                 notifyDataSetChanged();
+                AppSettings.getInstance().foodAdapter.notifyDataSetChanged();
             }
         });
 

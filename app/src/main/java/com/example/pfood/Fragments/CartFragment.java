@@ -23,6 +23,8 @@ import com.example.pfood.R;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class CartFragment extends Fragment {
 
     private View rootView;
@@ -48,8 +50,15 @@ public class CartFragment extends Fragment {
         }
         AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
+        ArrayList<FoodCollectable> foodCollectable = new ArrayList<>();
+        for (FoodCollectable f : AppSettings.getInstance().foodCart) {
+            if (f.getFoodCount() != 0)
+            {
+                foodCollectable.add(f);
+            }
+        }
         foodListView = rootView.findViewById(R.id.listview_food);
-        foodCartAdapter = new FoodCartAdapter(getActivity(), R.layout.foodcart_view_layout, AppSettings.getInstance().foodCart);
+        foodCartAdapter = new FoodCartAdapter(getActivity(), R.layout.foodcart_view_layout, foodCollectable);
         foodListView.setAdapter(foodCartAdapter);
         AppSettings.getInstance().foodListView = foodListView;
 

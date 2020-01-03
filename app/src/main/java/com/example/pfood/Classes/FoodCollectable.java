@@ -29,4 +29,20 @@ public class FoodCollectable extends Food {
     public Integer getFullPrice() {
         return this.fullPrice;
     }
+
+    public void incCount() {
+        this.foodCount++;
+        this.fullPrice = this.foodCount * this.getPrice();
+        AppSettings.getInstance().fullNumPrice += this.getPrice();
+    }
+
+    public void decCount() {
+        this.foodCount--;
+        this.fullPrice = this.foodCount * this.getPrice();
+        AppSettings.getInstance().fullNumPrice -= this.getPrice();
+
+        if (this.getFoodCount() == 0) {
+            AppSettings.getInstance().deleteCollectable(this);
+        }
+    }
 }

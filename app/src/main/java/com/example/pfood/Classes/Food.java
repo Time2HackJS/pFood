@@ -58,4 +58,8 @@ public class Food {
     public Integer getImageSource() {
         return this.imageSource;
     }
+
+    public Food getFood() {
+        return this;
+    }
 }

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +44,9 @@ public class DescriptionFragment extends Fragment {
 
         foodImage.setImageResource(AppSettings.getInstance().clickedFood.getImageSource());
         foodName.setText(AppSettings.getInstance().clickedFood.getName());
+
         foodPrice.setText(AppSettings.getInstance().clickedFood.getPrice() + "\u20BD");
+
         foodDescription.setText(AppSettings.getInstance().clickedFood.getDescription());
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +69,10 @@ public class DescriptionFragment extends Fragment {
                 AppSettings.getInstance().tvNum.setVisibility(View.VISIBLE);
                 AppSettings.getInstance().ivCircle.setVisibility(View.VISIBLE);
 
-                AppSettings.getInstance().tvNum.setText(Integer.toString(AppSettings.getInstance().foodCount));
+                AppSettings.getInstance().fullNumPrice += clickedFood.getPrice();
+                Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.scale);
+                AppSettings.getInstance().tvNum.startAnimation(anim);
+                AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
                 Log.i("DB FOOD CHECK", clickedFood.getName() + " " + AppSettings.getInstance().findFood(clickedFood_id).getFoodCount());
             }

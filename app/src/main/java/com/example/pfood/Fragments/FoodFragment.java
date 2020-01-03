@@ -41,6 +41,7 @@ public class FoodFragment extends Fragment {
         mAdapter = new FoodAdapter(getActivity(), foodList);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setAdapter(mAdapter);
+        AppSettings.getInstance().foodAdapter = mAdapter;
 
         return rootView;
     }

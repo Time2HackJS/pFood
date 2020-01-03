@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardview_id"
     android:layout_margin="10dp"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    cardview:cardCornerRadius="10dp">
+    cardview:cardCornerRadius="10dp"
+    cardview:cardElevation="12dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -23,14 +24,13 @@
         <TextView
             android:id="@+id/category_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
             android:background="@color/colorItemname"
             android:gravity="center|start"
             android:textSize="18dp"
             android:paddingStart="15dp"
             android:text="sampleText"
             android:textColor="#2d2d2d" />
-
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
