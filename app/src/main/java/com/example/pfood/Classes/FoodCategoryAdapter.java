@@ -11,23 +11,61 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pfood.Fragments.FoodFragment;
 import com.example.pfood.R;
+import com.example.pfood.model.FoodItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FoodCategoryAdapter extends RecyclerView.Adapter<FoodCategoryAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<FoodCategory> mData;
+    private ArrayList<FoodCategory> mData;
 
-    public FoodCategoryAdapter(Context mContext, List<FoodCategory> mData) {
+    private static final String TAG = "FoodCategoryAdapter";
+
+    public FoodCategoryAdapter(Context mContext) {
         this.mContext = mContext;
-        this.mData = mData;
+        this.mData = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("categories");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                GenericTypeIndicator<HashMap<String, ArrayList<FoodItem>>> generic
+                        = new GenericTypeIndicator<HashMap<String, ArrayList<FoodItem>>>() {
+                };
+
+                HashMap<String, ArrayList<FoodItem>> value = dataSnapshot.getValue(generic);
+
+                if (value != null) {
+                    for (String categoryName :
+                            value.keySet()) {
+                        Log.d(TAG, "onDataChange: " + categoryName);
+                        mData.add(new FoodCategory(categoryName, mData.size(), new ArrayList<Food>(), R.drawable.sushi));
+                    }
+                }
+
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: Error" + databaseError.toString());
+            }
+        });
+
         Log.i("ADAPTER_TEST", "ADAPTER INIT");
     }
 

@@ -15,9 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pfood.Classes.AppSettings;
 import com.example.pfood.Classes.Food;
 import com.example.pfood.Classes.FoodAdapter;
+import com.example.pfood.Classes.FoodCategory;
 import com.example.pfood.R;
+import com.example.pfood.model.FoodItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FoodFragment extends Fragment {
 
@@ -33,12 +42,11 @@ public class FoodFragment extends Fragment {
         rootView = inflater.inflate(R.layout.recycler_activity, container, false);
 
         foodList = new ArrayList<>();
-        foodList = AppSettings.getInstance().clickedCategory.getFoodList();
 
         getActivity().setTitle(AppSettings.getInstance().clickedCategory.getName());
 
         recyclerView = rootView.findViewById(R.id.recyclerview_id);
-        mAdapter = new FoodAdapter(getActivity(), foodList);
+        mAdapter = new FoodAdapter(getActivity());
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setAdapter(mAdapter);
         AppSettings.getInstance().foodAdapter = mAdapter;
