@@ -1,5 +1,9 @@
 package com.example.pfood.Activities;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,17 +14,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pfood.Classes.AppSettings;
 import com.example.pfood.Fragments.CartFragment;
-import com.example.pfood.Fragments.FoodFragment;
 import com.example.pfood.Fragments.MenuFragment;
+import com.example.pfood.Fragments.ProfileFragment;
 import com.example.pfood.Fragments.RatingFragment;
 import com.example.pfood.R;
 import com.google.android.material.navigation.NavigationView;
-
-import android.app.FragmentManager;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawer;
@@ -88,7 +86,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 break;
 
             case R.id.nav_profile:
-
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                                R.anim.enter_left_to_right, R.anim.exit_left_to_right)
+                        .replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.nav_basket:

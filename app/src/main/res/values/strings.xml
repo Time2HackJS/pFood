@@ -14,4 +14,10 @@
     <string name="delivery_address">Адрес доставки:</string>
     <string name="payment">Оплата</string>
     <string name="use_your_address">Введите ваш адрес</string>
+    <string name="order_snack_please_login_text">Для заказа необходимо авторизоваться</string>
+    <string name="order_snacl_login_action">Войти</string>
+    <string name="alread_logged_in">Вы уже вошли</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="save">Сохранить</string>
+    <string name="login">Войти</string>
 </resources>
