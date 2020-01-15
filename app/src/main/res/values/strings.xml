@@ -20,4 +20,7 @@
     <string name="no_internet">Нет интернета</string>
     <string name="save">Сохранить</string>
     <string name="login">Войти</string>
+    <string name="default_error">Произошла ошибка</string>
+    <string name="edit_profile_success">Данные успешно сохранены</string>
+    <string name="profile_title">Профиль</string>
 </resources>
