@@ -1,16 +1,29 @@
 package com.example.pfood.Classes;
 
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.pfood.R;
+import com.example.pfood.model.FoodItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AppSettings {
     private static AppSettings instance;
     private AppSettings() {}
+
+    private static final String TAG = "AppSettings";
 
     public static synchronized AppSettings getInstance() {
         if (instance == null) {
@@ -35,6 +48,9 @@ public class AppSettings {
     public FoodAdapter foodAdapter;
 
     public void fillFood() {
+
+
+
         if (foodList.isEmpty() && fcList.isEmpty()) {
             foodList.add(new Food("С лососем", 350, "Здесь должно находиться очень много-много текста, который якобы с трудом будет влезать на этом маленьком экране моего не менее маленького смартфона.", 1, R.drawable.testimage_1));
             foodList.add(new Food("С авокадо", 250, "Рис и авокадо", 2, R.drawable.testimage_2));

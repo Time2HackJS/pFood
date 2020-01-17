@@ -1,13 +1,11 @@
 package com.example.pfood.Fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,8 +18,11 @@ import com.example.pfood.Classes.AppSettings;
 import com.example.pfood.Classes.FoodCartAdapter;
 import com.example.pfood.Classes.FoodCollectable;
 import com.example.pfood.R;
-
-import org.w3c.dom.Text;
+import com.example.pfood.navigation.Router;
+import com.example.pfood.utils.FirebaseUtils;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -72,6 +73,38 @@ public class CartFragment extends Fragment {
         spinner.setSelection(1);
 
         getActivity().setTitle("Корзина");
+
+        Button orderButton = rootView.findViewById(R.id.order);
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (FirebaseUtils.isUserLoggedIn()) {
+                    Snackbar.make(view, "TODO" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), Snackbar.LENGTH_SHORT)
+                            .setAction("Logout", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AuthUI.getInstance().signOut(getContext());
+                                }
+                            })
+                            .show();
+                } else {
+                    Snackbar.make(view, R.string.order_snack_please_login_text, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.order_snacl_login_action, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Fragment fragment = new ProfileFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putBoolean(ProfileFragment.KEY_IS_OPEN_FIREBASE, true);
+                                    fragment.setArguments(bundle);
+                                    Router.openFragmentSimply(getActivity(), R.id.fragment_container, fragment);
+                                }
+                            })
+                            .show();
+                }
+
+            }
+        });
 
 
         return rootView;

@@ -16,24 +16,60 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pfood.Fragments.DescriptionFragment;
-import com.example.pfood.Fragments.FoodFragment;
 import com.example.pfood.R;
+import com.example.pfood.model.FoodItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Food> mData;
+    private ArrayList<Food> mData;
 
-    public FoodAdapter(Context mContext, List<Food> mData) {
+    private static final String TAG = "FoodAdapter";
+
+    public FoodAdapter(Context mContext) {
         this.mContext = mContext;
-        this.mData = mData;
-        Log.i("ADAPTER_TEST", "FOOD ADAPTER INIT");
+        mData = new ArrayList<>();
+        String categoryName = AppSettings.getInstance().clickedCategory.getName();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("categories/" + categoryName);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                GenericTypeIndicator<ArrayList<FoodItem>> generic
+                        = new GenericTypeIndicator<ArrayList<FoodItem>>() {
+                };
+
+                ArrayList<FoodItem> value = dataSnapshot.getValue(generic);
+
+                if (value != null) {
+                    for (FoodItem item : value) {
+                        if (item != null) {
+                            mData.add(new Food(item.getName(), (int) item.getPrice(), item.getDescription(), mData.size(), R.drawable.testimage_2));
+                        }
+                    }
+                }
+
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: Error" + databaseError.toString());
+            }
+        });
     }
 
     @NonNull

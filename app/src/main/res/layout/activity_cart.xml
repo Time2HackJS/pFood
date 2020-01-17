@@ -167,14 +167,14 @@
 
         <Button
             android:id="@+id/order"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="53dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:background="@drawable/rounded_button"
             android:text="Заказать"
             android:textColor="@color/colorItemname"
-            android:textSize="18dp"
-            android:layout_weight="1"/>
+            android:textSize="18dp" />
 
     </LinearLayout>
 

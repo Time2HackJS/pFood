@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pfood.Classes.AppSettings;
 import com.example.pfood.Classes.FoodCategoryAdapter;
 import com.example.pfood.R;
 
@@ -29,7 +28,7 @@ public class MenuFragment extends Fragment {
         getActivity().setTitle("Меню");
 
         recyclerView = rootView.findViewById(R.id.recyclerview_id);
-        mAdapter = new FoodCategoryAdapter(getActivity(), AppSettings.getInstance().fcList);
+        mAdapter = new FoodCategoryAdapter(getActivity());
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setAdapter(mAdapter);
 

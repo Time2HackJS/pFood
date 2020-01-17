@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "639680834085",
+    "firebase_url": "https://pfood-5b1eb.firebaseio.com",
+    "project_id": "pfood-5b1eb",
+    "storage_bucket": "pfood-5b1eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639680834085:android:ea69679fd1f47421cc2dcc",
+        "android_client_info": {
+          "package_name": "com.example.pfood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639680834085-2ogdm5kvave5nlhamlooanfglgmnun9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pfood",
+            "certificate_hash": "433d7f18c57a0c4176f03f490375fd8c6cece9ec"
+          }
+        },
+        {
+          "client_id": "639680834085-j9k43etgd3kso5e6dv8lpit693v2s8jr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsfw4TRBQEqU7u_N4aWy0CKzEVKwJlHqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639680834085-j9k43etgd3kso5e6dv8lpit693v2s8jr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
