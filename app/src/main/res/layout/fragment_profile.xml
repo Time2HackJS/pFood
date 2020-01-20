@@ -2,8 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:paddingTop="?actionBarSize">
+
+    <TextView
+        android:id="@+id/profile_rating_position_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:text="Ваше место в рейтинге: 1"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <EditText
         android:id="@+id/profile_name_et"

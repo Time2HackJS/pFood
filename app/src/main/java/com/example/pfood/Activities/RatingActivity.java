@@ -10,6 +10,6 @@ public class RatingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rating);
+        setContentView(R.layout.fragment_rating);
     }
 }

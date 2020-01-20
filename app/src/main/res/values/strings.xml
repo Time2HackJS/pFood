@@ -23,4 +23,6 @@
     <string name="default_error">Произошла ошибка</string>
     <string name="edit_profile_success">Данные успешно сохранены</string>
     <string name="profile_title">Профиль</string>
+    <string name="profile_rating_placeholder">Ваше место в рейтинге: %s\nВаш рейтинг: %s</string>
+    <string name="rating_my_team_button_text">Моя команда</string>
 </resources>
