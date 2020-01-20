@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,6 +67,7 @@ public class ProfileFragment extends Fragment {
         Button loginButton = view.findViewById(R.id.profile_login_button);
         final EditText profileNameEt = view.findViewById(R.id.profile_name_et);
         final EditText profileAddress = view.findViewById(R.id.profile_addres_et);
+        final TextView ratingText = view.findViewById(R.id.profile_rating_position_tv);
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
@@ -92,6 +94,14 @@ public class ProfileFragment extends Fragment {
                             if (value != null) {
                                 profileAddress.setText(value.address);
                                 profileNameEt.setText(value.name);
+
+                                ratingText.setVisibility(View.VISIBLE);
+                                ratingText.setText(getContext().getString(
+                                        R.string.profile_rating_placeholder,
+                                        value.ratingPosition.toString(),
+                                        value.rating.toString()
+                                        )
+                                );
                             }
                         }
 
@@ -101,6 +111,7 @@ public class ProfileFragment extends Fragment {
                         }
                     });
         } else {
+            ratingText.setVisibility(View.GONE);
             loginButton.setText(R.string.login);
             profileAddress.setEnabled(false);
             profileNameEt.setEnabled(false);
@@ -123,6 +134,7 @@ public class ProfileFragment extends Fragment {
                                             = new GenericTypeIndicator<HashMap<String, UserItem>>() {
                                     };
 
+                                    //map of users
                                     HashMap<String, UserItem> value = dataSnapshot.getValue(generic);
 
                                     //new User
@@ -132,7 +144,9 @@ public class ProfileFragment extends Fragment {
                                                 profileAddress.getText().toString(),
                                                 //TODO: потенциально инвайт код может быть у двух пользователей одинаковым - придумать как этого избежать
                                                 Long.toString(Calendar.getInstance().getTimeInMillis()),
-                                                0L
+                                                0L,
+                                                0L,
+                                                (long) value.keySet().size() + 1
                                         );
 
                                         database
@@ -148,7 +162,7 @@ public class ProfileFragment extends Fragment {
 
                                     } else {//old user
                                         Map<String, Object> updates = new HashMap<>();
-                                        
+
                                         updates.put("name", profileNameEt.getText().toString());
                                         updates.put("address", profileAddress.getText().toString());
 
