@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.pfood.Fragments.FoodFragment;
 import com.example.pfood.R;
 import com.example.pfood.model.FoodItem;
@@ -48,12 +49,21 @@ public class FoodCategoryAdapter extends RecyclerView.Adapter<FoodCategoryAdapte
                 };
 
                 HashMap<String, ArrayList<FoodItem>> value = dataSnapshot.getValue(generic);
-
+                Log.i(TAG, "onDataChange: onDataChanged " + value);
+                String imageUrl = null;
                 if (value != null) {
                     for (String categoryName :
                             value.keySet()) {
-                        Log.d(TAG, "onDataChange: " + categoryName);
-                        mData.add(new FoodCategory(categoryName, mData.size(), new ArrayList<Food>(), R.drawable.sushi));
+                        if (value.get(categoryName) != null) {
+                            for (FoodItem item : value.get(categoryName)) {
+                                if (item != null && item.getImageUrl() != null) {
+                                    imageUrl = item.getImageUrl();
+                                    break;
+                                }
+                            }
+                        }
+                        Log.i(TAG, "onDataChange: " + value.get(categoryName));
+                        mData.add(new FoodCategory(categoryName, mData.size(), new ArrayList<Food>(), imageUrl));
                     }
                 }
 
@@ -86,7 +96,9 @@ public class FoodCategoryAdapter extends RecyclerView.Adapter<FoodCategoryAdapte
 
         Log.i("ADAPTER_TEST", "ITEM INSERTED");
         holder.tv_name.setText(mData.get(position).getName());
-        holder.iv_image.setImageResource(mData.get(position).getImageSource());
+        if (mData.get(position).getImageUrl() != null) {
+            Glide.with(holder.itemView.getContext()).load(mData.get(position).getImageUrl()).into(holder.iv_image);
+        }
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

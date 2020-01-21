@@ -14,11 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.example.pfood.Classes.AppSettings;
 import com.example.pfood.Classes.Food;
-import com.example.pfood.Classes.FoodCategoryAdapter;
 import com.example.pfood.Classes.FoodCollectable;
 import com.example.pfood.R;
 
@@ -41,8 +40,7 @@ public class DescriptionFragment extends Fragment {
         foodPrice = rootView.findViewById(R.id.foodPrice);
         foodDescription = rootView.findViewById(R.id.foodDescription);
         addButton = rootView.findViewById(R.id.addToCart);
-
-        foodImage.setImageResource(AppSettings.getInstance().clickedFood.getImageSource());
+        Glide.with(foodImage).load(AppSettings.getInstance().clickedFood.getImageUrl()).into(foodImage);
         foodName.setText(AppSettings.getInstance().clickedFood.getName());
 
         foodPrice.setText(AppSettings.getInstance().clickedFood.getPrice() + "\u20BD");

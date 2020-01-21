@@ -10,19 +10,19 @@ public class FoodCategory {
     private String name;
     private Integer id;
     private ArrayList<Food> foodList;
-    private Integer imageSource;
+    private String imageUrl;
 
     public FoodCategory() {
     }
 
-    public FoodCategory(String name, Integer id, ArrayList<Food> foodList, Integer imageSource) {
+    public FoodCategory(String name, Integer id, ArrayList<Food> foodList, String imageUrl) {
         this.name = name;
         this.id = id;
 
         this.foodList = new ArrayList<>();
         this.foodList = foodList;
 
-        this.imageSource = imageSource;
+        this.imageUrl = imageUrl;
     }
 
     public void setName(String name) {
@@ -37,9 +37,6 @@ public class FoodCategory {
         this.foodList = foodList;
     }
 
-    public void setImageSource(Integer imageSource) {
-        this.imageSource = imageSource;
-    }
 
 
     public String getName() {
@@ -54,7 +51,11 @@ public class FoodCategory {
         return this.foodList;
     }
 
-    public Integer getImageSource() {
-        return this.imageSource;
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

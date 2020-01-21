@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.pfood.Fragments.DescriptionFragment;
 import com.example.pfood.R;
 import com.example.pfood.model.FoodItem;
@@ -57,7 +58,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                 if (value != null) {
                     for (FoodItem item : value) {
                         if (item != null) {
-                            mData.add(new Food(item.getName(), (int) item.getPrice(), item.getDescription(), mData.size(), R.drawable.testimage_2));
+                            mData.add(new Food(item.getName(), (int) item.getPrice(), item.getDescription(), mData.size(), item.getImageUrl()));
                         }
                     }
                 }
@@ -89,7 +90,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
 
         Log.i("ADAPTER_TEST", "FOOD ITEM INSERTED");
         holder.tv_name.setText(mData.get(position).getName());
-        holder.iv_image.setImageResource(mData.get(position).getImageSource());
+        if(mData.get(position).getImageUrl() != null) {
+            Glide.with(holder.iv_image).load(mData.get(position).getImageUrl()).into(holder.iv_image);
+        }
         holder.bPrice.setText(mData.get(position).getPrice().toString());
 
         if (AppSettings.getInstance().findCollectable(mData.get(position)) != null &&

@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.pfood.R;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
         String name = getItem(position).getName();
         int fullPrice = getItem(position).getFullPrice();
         int count = getItem(position).getFoodCount();
-        int imageSource = getItem(position).getImageSource();
+        String imageUrl = getItem(position).getImageUrl();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -112,7 +112,7 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
         tvName.setText(name);
         tvCount.setText(Integer.toString(count));
         tvPrice.setText(fullPrice + "\u20BD");
-        imageView.setImageResource(imageSource);
+        Glide.with(imageView).load(imageUrl).into(imageView);
         AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
 
