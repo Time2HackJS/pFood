@@ -99,6 +99,7 @@ public class ProfileFragment extends Fragment {
                                 ratingText.setText(getContext().getString(
                                         R.string.profile_rating_placeholder,
                                         value.ratingPosition.toString(),
+                                        value.monthRatingPostion.toString(),
                                         value.rating.toString()
                                         )
                                 );
@@ -145,6 +146,8 @@ public class ProfileFragment extends Fragment {
                                                 //TODO: потенциально инвайт код может быть у двух пользователей одинаковым - придумать как этого избежать
                                                 Long.toString(Calendar.getInstance().getTimeInMillis()),
                                                 0L,
+                                                0L,
+                                                (long) value.keySet().size() + 1,
                                                 0L,
                                                 (long) value.keySet().size() + 1
                                         );

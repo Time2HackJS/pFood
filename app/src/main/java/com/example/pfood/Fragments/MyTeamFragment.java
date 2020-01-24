@@ -38,6 +38,7 @@ public class MyTeamFragment extends Fragment {
     private TextView teamInviteCode;
     private Button createTeam;
     private Button joinTeam;
+    private TextView membersList;
 
     @Nullable
     @Override
@@ -50,6 +51,7 @@ public class MyTeamFragment extends Fragment {
         teamInviteCode = view.findViewById(R.id.team_invite_code_tv);
         createTeam = view.findViewById(R.id.team_create_btn);
         joinTeam = view.findViewById(R.id.team_join_btn);
+        membersList = view.findViewById(R.id.team_members_list);
 
         return view;
     }
@@ -59,6 +61,13 @@ public class MyTeamFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("teams");
+
+        teamName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Router.openFragmentSimply(getActivity(), R.id.fragment_container, new CreateTeamFragment());
+            }
+        });
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -93,6 +102,33 @@ public class MyTeamFragment extends Fragment {
                                 teamPlace.setText(item.teamPlace.toString());
                                 teamRating.setText(item.teamRating.toString());
                                 teamInviteCode.setText(userValue.inviteCode);
+
+                                //fill members list
+
+                                membersList.setText("");
+                                for (String uId : item.teamMembers.values()) {
+                                    database.getReference("users").child(uId).addValueEventListener(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    GenericTypeIndicator<UserItem> generic
+                                                            = new GenericTypeIndicator<UserItem>() {
+                                                    };
+
+                                                    UserItem memberUser = dataSnapshot.getValue(generic);
+
+                                                    if (memberUser != null) {
+                                                        membersList.setText(membersList.getText() + "\n" + memberUser.name + " " + memberUser.rating + " баллов");
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            }
+                                    );
+                                }
                             } else {
                                 createTeam.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -108,10 +144,7 @@ public class MyTeamFragment extends Fragment {
                                             }
                                         }
                                 );
-                                teamName.setVisibility(View.GONE);
-                                teamPlace.setVisibility(View.GONE);
-                                teamRating.setVisibility(View.GONE);
-                                teamInviteCode.setVisibility(View.GONE);
+
                             }
 
                             Log.i(TAG, "onDataChange: user is " + userValue);
@@ -122,6 +155,12 @@ public class MyTeamFragment extends Fragment {
 
                         }
                     });
+                } else {
+                    Snackbar.make(getView(), "Авторизуйтесь", Snackbar.LENGTH_SHORT).show();
+                    teamName.setVisibility(View.GONE);
+                    teamPlace.setVisibility(View.GONE);
+                    teamRating.setVisibility(View.GONE);
+                    teamInviteCode.setVisibility(View.GONE);
                 }
             }
 

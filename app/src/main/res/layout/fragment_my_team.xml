@@ -93,4 +93,10 @@
         android:background="@drawable/rounded_button"
         android:padding="12dp"
         android:textAllCaps="false"/>
+
+    <TextView
+        android:id="@+id/team_members_list"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

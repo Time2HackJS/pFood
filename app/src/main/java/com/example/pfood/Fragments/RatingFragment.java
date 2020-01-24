@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.pfood.Classes.User;
 import com.example.pfood.Classes.UserRatingAdapter;
 import com.example.pfood.R;
+import com.example.pfood.model.TeamItem;
 import com.example.pfood.model.UserItem;
 import com.example.pfood.navigation.Router;
 import com.google.firebase.database.DataSnapshot;
@@ -41,32 +42,30 @@ public class RatingFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_rating, container, false);
 
         userList = new ArrayList<>();
-//        userList.add(new User(1, "Виталя", 1337));
-//        userList.add(new User(2, "Евпатий", 322));
-//        userList.add(new User(3, "Гриша", 228));
+
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
+        DatabaseReference usersRef = database.getReference("teams");
 
         usersRef.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        GenericTypeIndicator<HashMap<String, UserItem>> generic
-                                = new GenericTypeIndicator<HashMap<String, UserItem>>() {
+                        GenericTypeIndicator<HashMap<String, TeamItem>> generic
+                                = new GenericTypeIndicator<HashMap<String, TeamItem>>() {
                         };
 
-                        HashMap<String, UserItem> usersValue = dataSnapshot.getValue(generic);
+                        HashMap<String, TeamItem> teamValue = dataSnapshot.getValue(generic);
 
 
-                        if (usersValue != null) {
+                        if (teamValue != null) {
                             mAdapter.clear();
-                            for (String key : usersValue.keySet()) {
-                                UserItem userItem = usersValue.get(key);
-                                Log.i("LOl", "onDataChange: " + userItem.ratingPosition);
-                                if (userItem != null) {
+                            for (String key : teamValue.keySet()) {
+                                TeamItem teamItem = teamValue.get(key);
+                                if (teamItem != null) {
                                     try {
-                                        User user = new User(userItem.ratingPosition.intValue(), userItem.name, userItem.rating.intValue());
+                                        User user = new User(teamItem.teamPlace.intValue(), teamItem.teamName, teamItem.teamRating.intValue());
                                         mAdapter.add(user);
                                     } catch (Exception e) {
                                     }

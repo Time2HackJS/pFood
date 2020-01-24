@@ -100,8 +100,7 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
                 }
                 else {
                     ViewGroup.LayoutParams lp = AppSettings.getInstance().foodListView.getLayoutParams();
-                    lp.height = 0;
-                    AppSettings.getInstance().foodListView.setLayoutParams(lp);
+                    AppSettings.getInstance().foodListView.setVisibility(View.GONE);
                 }
 
                 notifyDataSetChanged();
