@@ -12,7 +12,7 @@ public class FoodCollectable extends Food {
         this.setPrice(food.getPrice());
         this.setDescription(food.getDescription());
         this.setId(food.getId());
-        this.setImageSource(food.getImageSource());
+        this.setImageUrl(food.getImageUrl());
         this.foodCount = foodCount;
         this.fullPrice = food.getPrice();
     }

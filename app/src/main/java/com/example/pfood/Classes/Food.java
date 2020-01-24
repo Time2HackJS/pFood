@@ -5,18 +5,18 @@ public class Food {
     private Integer price;
     private String description;
     private Integer id;
-    private Integer imageSource;
+    private String imageUrl;
 
     public Food() {
 
     }
 
-    public Food(String name, Integer price, String description, Integer id, Integer imageSource) {
+    public Food(String name, Integer price, String description, Integer id, String imageUrl) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.id = id;
-        this.imageSource = imageSource;
+        this.imageUrl = imageUrl;
     }
 
     public void setName(String name) {
@@ -35,9 +35,6 @@ public class Food {
         this.id = id;
     }
 
-    public void setImageSource(Integer imageSource) {
-        this.imageSource = imageSource;
-    }
 
     public String getName() {
         return this.name;
@@ -55,8 +52,12 @@ public class Food {
         return this.id;
     }
 
-    public Integer getImageSource() {
-        return this.imageSource;
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Food getFood() {

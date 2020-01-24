@@ -56,18 +56,55 @@
             android:textSize="15dp" />
 
         <Button
-            android:layout_marginTop="30dp"
             android:id="@+id/addToCart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="24dp"
             android:background="@drawable/rounded_button"
             android:text="Добавить в корзину"
             android:textColor="@color/colorItemname"
             android:textSize="18dp" />
-    </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/count_control_ll"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center|end"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/layout_bg"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageButton
+                android:id="@+id/button_remove"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".30"
+                android:background="@android:color/darker_gray"
+                android:src="@drawable/ic_remove_button" />
+
+            <TextView
+                android:id="@+id/cartFoodCount"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".30"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="20dp" />
+
+            <ImageButton
+                android:id="@+id/button_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".30"
+                android:background="@android:color/darker_gray"
+                android:src="@drawable/ic_add_button" />
+        </LinearLayout>
+    </LinearLayout>
 
 
 </ScrollView>

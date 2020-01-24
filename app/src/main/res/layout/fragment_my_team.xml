@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/team_name_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -26,6 +27,7 @@
         android:text="Вы занимаете" />
 
     <TextView
+        android:id="@+id/team_place_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -42,6 +44,7 @@
         android:text="И имеете" />
 
     <TextView
+        android:id="@+id/team_rating_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -58,6 +61,7 @@
         android:text="Пригласительный код"
         />
     <TextView
+        android:id="@+id/team_invite_code_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -66,4 +70,33 @@
         android:layout_marginTop="12dp"
         android:textColor="@android:color/black"
         />
+
+    <Button
+        android:id="@+id/team_join_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_gravity="center"
+        android:text="Присоединиться к команде"
+        android:textColor="@android:color/white"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/team_create_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Создать команду"
+        android:textColor="@android:color/white"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        android:textAllCaps="false"/>
+
+    <TextView
+        android:id="@+id/team_members_list"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

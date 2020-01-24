@@ -52,15 +52,15 @@ public class AppSettings {
 
 
         if (foodList.isEmpty() && fcList.isEmpty()) {
-            foodList.add(new Food("С лососем", 350, "Здесь должно находиться очень много-много текста, который якобы с трудом будет влезать на этом маленьком экране моего не менее маленького смартфона.", 1, R.drawable.testimage_1));
-            foodList.add(new Food("С авокадо", 250, "Рис и авокадо", 2, R.drawable.testimage_2));
-            foodList.add(new Food("Филадельфия", 400, "Рис и рыба какая-то", 3, R.drawable.testimage_3));
-            foodList.add(new Food("Калифорния", 300, "Рис и икра", 4, R.drawable.testimage_4));
+//            foodList.add(new Food("С лососем", 350, "Здесь должно находиться очень много-много текста, который якобы с трудом будет влезать на этом маленьком экране моего не менее маленького смартфона.", 1, R.drawable.testimage_1));
+//            foodList.add(new Food("С авокадо", 250, "Рис и авокадо", 2, R.drawable.testimage_2));
+//            foodList.add(new Food("Филадельфия", 400, "Рис и рыба какая-то", 3, R.drawable.testimage_3));
+//            foodList.add(new Food("Калифорния", 300, "Рис и икра", 4, R.drawable.testimage_4));
 
-            fcList.add(new FoodCategory("Суши", 1, foodList, R.drawable.sushi));
-
-            fcList.add(new FoodCategory("Роллы", 2, foodList, R.drawable.rolls));
-            fcList.add(new FoodCategory("Лапша", 3, foodList, R.drawable.nooddles));
+//            fcList.add(new FoodCategory("Суши", 1, foodList, R.drawable.sushi));
+//
+//            fcList.add(new FoodCategory("Роллы", 2, foodList, R.drawable.rolls));
+//            fcList.add(new FoodCategory("Лапша", 3, foodList, R.drawable.nooddles));
         }
     }
 

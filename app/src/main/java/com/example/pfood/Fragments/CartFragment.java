@@ -80,14 +80,7 @@ public class CartFragment extends Fragment {
             public void onClick(View view) {
 
                 if (FirebaseUtils.isUserLoggedIn()) {
-                    Snackbar.make(view, "TODO" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), Snackbar.LENGTH_SHORT)
-                            .setAction("Logout", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    AuthUI.getInstance().signOut(getContext());
-                                }
-                            })
-                            .show();
+
                 } else {
                     Snackbar.make(view, R.string.order_snack_please_login_text, Snackbar.LENGTH_LONG)
                             .setAction(R.string.order_snacl_login_action, new View.OnClickListener() {
