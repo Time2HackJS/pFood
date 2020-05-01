@@ -6,6 +6,8 @@ public class Food {
     private String description;
     private Integer id;
     private String imageUrl;
+    private String products;
+    private Boolean sale;
 
     public Food() {
 
@@ -17,6 +19,23 @@ public class Food {
         this.description = description;
         this.id = id;
         this.imageUrl = imageUrl;
+    }
+
+    public Food(String name, Integer price, String description, String products, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.products = products;
+        this.imageUrl = imageUrl;
+    }
+
+    public Food(String name, Integer price, String description, String products, String imageUrl, Boolean sale) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.products = products;
+        this.imageUrl = imageUrl;
+        this.sale = sale;
     }
 
     public void setName(String name) {
@@ -34,7 +53,6 @@ public class Food {
     public void setId(Integer id) {
         this.id = id;
     }
-
 
     public String getName() {
         return this.name;
@@ -60,7 +78,19 @@ public class Food {
         this.imageUrl = imageUrl;
     }
 
-    public Food getFood() {
-        return this;
+    public String getProducts() {
+        return products;
+    }
+
+    public void setProducts(String products) {
+        this.products = products;
+    }
+
+    public Boolean getSale() {
+        return sale;
+    }
+
+    public void setSale(Boolean sale) {
+        this.sale = sale;
     }
 }

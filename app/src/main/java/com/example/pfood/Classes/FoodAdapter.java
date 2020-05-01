@@ -58,7 +58,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                 if (value != null) {
                     for (FoodItem item : value) {
                         if (item != null) {
-                            mData.add(new Food(item.getName(), (int) item.getPrice(), item.getDescription(), mData.size(), item.getImageUrl()));
+                            Boolean sale = false;
+                            if (item.getSale() != null) sale = true;
+                            mData.add(new Food(item.getName(), (int) item.getPrice(), item.getDescription(), item.getProducts(), item.getImageUrl(), sale));
                         }
                     }
                 }
@@ -95,8 +97,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         }
         holder.bPrice.setText(mData.get(position).getPrice().toString());
 
+        if (!mData.get(position).getSale()) {
+            holder.foodAction.setVisibility(View.GONE);
+            holder.foodActionPercent.setText("");
+        }
+
         if (AppSettings.getInstance().findCollectable(mData.get(position)) != null &&
-            AppSettings.getInstance().findCollectable(mData.get(position)).getFoodCount() != 0) {
+                AppSettings.getInstance().findCollectable(mData.get(position)).getFoodCount() != 0) {
 
             holder.bAdd.setVisibility(View.VISIBLE);
             holder.bRemove.setVisibility(View.VISIBLE);
@@ -158,9 +165,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
             @Override
             public void onClick(View view) {
                 FoodCollectable clickedFood = new FoodCollectable(mData.get(position), 1);
-                AppSettings.getInstance().fullNumPrice += mData.get(position).getPrice();
-                AppSettings.getInstance().foodCache.add(mData.get(position));
-                AppSettings.getInstance().foodCart.add(clickedFood);
+                if (AppSettings.getInstance().findCollectable(clickedFood) == null) {
+                    AppSettings.getInstance().fullNumPrice += mData.get(position).getPrice();
+                    AppSettings.getInstance().foodCache.add(mData.get(position));
+                    AppSettings.getInstance().foodCart.add(clickedFood);
+                } else {
+                    AppSettings.getInstance().findCollectable(clickedFood).incCount();
+                }
 
                 AppSettings.getInstance().tvNum.setVisibility(View.VISIBLE);
                 AppSettings.getInstance().ivCircle.setVisibility(View.VISIBLE);
@@ -203,6 +214,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         Button bPrice;
         ImageButton bAdd, bRemove;
         LinearLayout countLinear;
+        ImageView foodAction;
+        TextView foodActionPercent;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -215,6 +228,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
             bAdd = itemView.findViewById(R.id.b_add);
             bRemove = itemView.findViewById(R.id.b_remove);
             countLinear = itemView.findViewById(R.id.count_linear);
+            foodAction = itemView.findViewById(R.id.food_action);
+            foodActionPercent = itemView.findViewById(R.id.food_action_percent);
         }
     }
 }

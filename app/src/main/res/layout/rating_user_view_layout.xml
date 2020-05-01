@@ -5,11 +5,12 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/top_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal"
-        android:padding="20dp"
-        android:layout_gravity="center">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/user_rating"

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,12 +17,12 @@ import com.example.pfood.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRatingAdapter extends ArrayAdapter<User> {
+public class TeamRatingAdapter extends ArrayAdapter<Team> {
 
     private Context mContext;
     private Integer mResource;
 
-    public UserRatingAdapter(Context context, int resource, ArrayList<User> objects) {
+    public TeamRatingAdapter(Context context, int resource, ArrayList<Team> objects) {
         super(context, resource, objects);
 
         mContext = context;
@@ -31,8 +32,8 @@ public class UserRatingAdapter extends ArrayAdapter<User> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         String name = getItem(position).getName();
-        int points = getItem(position).getPoints();
-        int top_tier = getItem(position).getTopTier();
+        int points = getItem(position).getTeamRating();
+        int top_tier = getItem(position).getTeamPlace();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -40,6 +41,13 @@ public class UserRatingAdapter extends ArrayAdapter<User> {
         TextView tvRating = convertView.findViewById(R.id.user_rating);
         TextView tvName = convertView.findViewById(R.id.user_name);
         TextView tvPoints = convertView.findViewById(R.id.user_points);
+        LinearLayout rLinear = convertView.findViewById(R.id.top_linear);
+
+        if (top_tier == 4) {
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0, 60, 0, 0);
+            rLinear.setLayoutParams(lp);
+        }
 
         tvRating.setText(Integer.toString(top_tier));
         tvName.setText(name);

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.CartActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,10 +40,7 @@
             android:id="@+id/listview_food"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
+            android:nestedScrollingEnabled="true"
             android:layout_weight="4"/>
 
         <View
@@ -53,6 +49,7 @@
             android:background="@android:color/darker_gray"/>
 
         <LinearLayout
+            android:id="@+id/cart_delivery_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -78,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="200 \u20BD"
+                android:text="0 \u20BD"
                 android:textAlignment="gravity"
                 android:textSize="17sp" />
 
@@ -108,14 +105,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="5000 Р"
+                android:text="0 \u20BD"
                 android:textSize="17dp" />
 
         </LinearLayout>
-
-
-
-
 
         <TextView
             android:id="@+id/textView6"
@@ -142,8 +135,8 @@
                 android:gravity="top|start"
                 android:hint="@string/use_your_address"
                 android:inputType="textMultiLine"
+                android:maxLines="3"
                 android:padding="5dp"
-                android:singleLine="true"
                 android:textColor="@android:color/darker_gray" />
         </LinearLayout>
 

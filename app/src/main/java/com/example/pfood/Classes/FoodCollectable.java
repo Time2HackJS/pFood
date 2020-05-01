@@ -11,7 +11,7 @@ public class FoodCollectable extends Food {
         this.setName(food.getName());
         this.setPrice(food.getPrice());
         this.setDescription(food.getDescription());
-        this.setId(food.getId());
+        this.setDescription(food.getDescription());
         this.setImageUrl(food.getImageUrl());
         this.foodCount = foodCount;
         this.fullPrice = food.getPrice();
@@ -44,5 +44,9 @@ public class FoodCollectable extends Food {
         if (this.getFoodCount() == 0) {
             AppSettings.getInstance().deleteCollectable(this);
         }
+    }
+
+    public void setFullPrice(Integer fullPrice) {
+        this.fullPrice = fullPrice;
     }
 }

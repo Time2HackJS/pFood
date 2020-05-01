@@ -1,5 +1,8 @@
 package com.example.pfood.Fragments;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,12 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.pfood.Classes.AppSettings;
+import com.example.pfood.Classes.AppUsers;
+import com.example.pfood.Classes.Team;
+import com.example.pfood.Classes.User;
+import com.example.pfood.NetworkClasses.NetworkUsers;
 import com.example.pfood.R;
+import com.example.pfood.ResponseModels.UserTeamModel;
 import com.example.pfood.model.TeamItem;
 import com.example.pfood.model.UserItem;
 import com.example.pfood.navigation.Router;
@@ -26,6 +36,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class MyTeamFragment extends Fragment {
@@ -39,6 +51,8 @@ public class MyTeamFragment extends Fragment {
     private Button createTeam;
     private Button joinTeam;
     private TextView membersList;
+    private ArrayList<String> users = new ArrayList<>();
+    private String usersString = "";
 
     @Nullable
     @Override
@@ -88,7 +102,7 @@ public class MyTeamFragment extends Fragment {
                                     = new GenericTypeIndicator<UserItem>() {
                             };
 
-                            UserItem userValue = dataSnapshot.getValue(generic);
+                            final UserItem userValue = dataSnapshot.getValue(generic);
 
                             if (userValue == null) {
                                 Snackbar.make(getView(), R.string.fill_personal_data, Snackbar.LENGTH_LONG).show();
@@ -98,28 +112,43 @@ public class MyTeamFragment extends Fragment {
                                 joinTeam.setVisibility(View.GONE);
                                 createTeam.setVisibility(View.GONE);
                                 TeamItem item = teamsValue.get(userValue.inviteCode);
+
+                                for (Team t : AppSettings.getInstance().teamList) {
+                                    if (t.getName().equals(item.teamName)) {
+                                        teamPlace.setText(t.getTeamPlace().toString());
+                                        teamRating.setText(t.getTeamRating().toString());
+                                    }
+                                }
+
                                 teamName.setText(item.teamName);
-                                teamPlace.setText(item.teamPlace.toString());
-                                teamRating.setText(item.teamRating.toString());
                                 teamInviteCode.setText(userValue.inviteCode);
+                                teamInviteCode.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                        ClipData clip = ClipData.newPlainText("", userValue.inviteCode);
+                                        clipboard.setPrimaryClip(clip);
+                                        Toast.makeText(getContext(), "Пригласительный код скопирован в буфер обмена!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
                                 //fill members list
-
-                                membersList.setText("");
                                 for (String uId : item.teamMembers.values()) {
                                     database.getReference("users").child(uId).addValueEventListener(
                                             new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                    GenericTypeIndicator<UserItem> generic
-                                                            = new GenericTypeIndicator<UserItem>() {
-                                                    };
-
-                                                    UserItem memberUser = dataSnapshot.getValue(generic);
-
-                                                    if (memberUser != null) {
-                                                        membersList.setText(membersList.getText() + "\n" + memberUser.name + " " + memberUser.rating + " баллов");
+                                                    for (User u : AppUsers.getInstance().userList) {
+                                                        if (u.getInviteCode().equals(userValue.inviteCode))
+                                                            users.add(u.getRating() + " " + u.getName());
                                                     }
+                                                    Collections.sort(users);
+
+                                                    for (String u : users) {
+                                                        usersString += u.substring(u.indexOf(" ")) + " " + u.substring(0, u.indexOf(" ")) + " баллов\n";
+                                                    }
+
+                                                    membersList.setText(usersString);
                                                 }
 
                                                 @Override

@@ -1,102 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
+    android:gravity="center">
 
-    <TextView
-        android:id="@+id/team_name_tv"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Название команды"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:text="Вы занимаете" />
+        <TextView
+            android:id="@+id/team_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/team_place_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:text="3 место"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="Место в рейтинге" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:text="И имеете" />
+        <TextView
+            android:id="@+id/team_place_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/team_rating_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:text="129 очков рейтинга"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="Баллов у команды" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="12dp"
-        android:text="Пригласительный код"
-        />
-    <TextView
-        android:id="@+id/team_invite_code_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="504129"
-        android:textSize="18sp"
-        android:layout_marginTop="12dp"
-        android:textColor="@android:color/black"
-        />
+        <TextView
+            android:id="@+id/team_rating_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/team_join_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:layout_gravity="center"
-        android:text="Присоединиться к команде"
-        android:textColor="@android:color/white"
-        android:background="@drawable/rounded_button"
-        android:padding="12dp"
-        android:textAllCaps="false"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:text="Пригласительный код"
+            />
+        <TextView
+            android:id="@+id/team_invite_code_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textSize="18sp"
+            android:layout_marginTop="12dp"
+            android:textColor="@android:color/black"
+            />
 
-    <Button
-        android:id="@+id/team_create_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Создать команду"
-        android:textColor="@android:color/white"
-        android:background="@drawable/rounded_button"
-        android:padding="12dp"
-        android:textAllCaps="false"/>
+        <Button
+            android:id="@+id/team_join_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:layout_gravity="center"
+            android:text="Присоединиться к команде"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button"
+            android:padding="12dp"
+            android:textAllCaps="false"/>
 
-    <TextView
-        android:id="@+id/team_members_list"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        <Button
+            android:id="@+id/team_create_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Создать команду"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button"
+            android:padding="12dp"
+            android:textAllCaps="false"/>
+
+        <TextView
+            android:id="@+id/team_members_list"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+</ScrollView>

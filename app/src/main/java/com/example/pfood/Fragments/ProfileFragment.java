@@ -9,12 +9,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.pfood.NetworkClasses.NetworkUsers;
 import com.example.pfood.R;
+import com.example.pfood.ResponseModels.PointModel;
+import com.example.pfood.ResponseModels.ResponseModel;
+import com.example.pfood.ResponseModels.UserTeamModel;
 import com.example.pfood.model.UserItem;
 import com.example.pfood.utils.FirebaseUtils;
 import com.example.pfood.utils.KeyboardUtils;
@@ -42,13 +47,15 @@ import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements NetworkUsers.AddUserCallback, NetworkUsers.GetUserInfoCallback, NetworkUsers.GetUserTeamCallback {
 
     private static final String TAG = "ProfileFragment";
 
     public static final String KEY_IS_OPEN_FIREBASE = "key_is_open_firebase";
 
     private static final int LOGIN_REQUEST_CODE = 256;
+
+    private TextView ratingText;
 
     @Nullable
     @Override
@@ -67,7 +74,7 @@ public class ProfileFragment extends Fragment {
         Button loginButton = view.findViewById(R.id.profile_login_button);
         final EditText profileNameEt = view.findViewById(R.id.profile_name_et);
         final EditText profileAddress = view.findViewById(R.id.profile_addres_et);
-        final TextView ratingText = view.findViewById(R.id.profile_rating_position_tv);
+        ratingText = view.findViewById(R.id.profile_rating_position_tv);
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
@@ -75,6 +82,11 @@ public class ProfileFragment extends Fragment {
             loginButton.setText(R.string.save);
             profileAddress.setEnabled(true);
             profileNameEt.setEnabled(true);
+
+            NetworkUsers.onGetUserTeamCallback(this);
+            NetworkUsers.onGetUserInfoCallback(this);
+            NetworkUsers.onAddUserCallback(this);
+            NetworkUsers.getUserTeam(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
             //set data from database to edit text
             database
@@ -94,15 +106,6 @@ public class ProfileFragment extends Fragment {
                             if (value != null) {
                                 profileAddress.setText(value.address);
                                 profileNameEt.setText(value.name);
-
-                                ratingText.setVisibility(View.VISIBLE);
-                                ratingText.setText(getContext().getString(
-                                        R.string.profile_rating_placeholder,
-                                        value.ratingPosition.toString(),
-                                        value.monthRatingPostion.toString(),
-                                        value.rating.toString()
-                                        )
-                                );
                             }
                         }
 
@@ -140,51 +143,63 @@ public class ProfileFragment extends Fragment {
 
                                     //new User
                                     if (value.get(FirebaseAuth.getInstance().getUid()) == null) {
-                                        UserItem userItem = new UserItem(
-                                                profileNameEt.getText().toString(),
-                                                profileAddress.getText().toString(),
-                                                //TODO: потенциально инвайт код может быть у двух пользователей одинаковым - придумать как этого избежать
-                                                Long.toString(Calendar.getInstance().getTimeInMillis()),
-                                                0L,
-                                                0L,
-                                                (long) value.keySet().size() + 1,
-                                                0L,
-                                                (long) value.keySet().size() + 1
-                                        );
+                                        if (!profileAddress.getText().toString().equals("") && !profileNameEt.getText().toString().equals("")) {
+                                            UserItem userItem = new UserItem(
+                                                    profileNameEt.getText().toString(),
+                                                    profileAddress.getText().toString(),
+                                                    //TODO: потенциально инвайт код может быть у двух пользователей одинаковым - придумать как этого избежать
+                                                    Long.toString(Calendar.getInstance().getTimeInMillis()),
+                                                    0L,
+                                                    0L,
+                                                    (long) value.keySet().size() + 1,
+                                                    0L,
+                                                    (long) value.keySet().size() + 1
+                                            );
 
-                                        database
-                                                .child("users")
-                                                .child(FirebaseAuth.getInstance().getUid())
-                                                .setValue(userItem)
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Snackbar.make(view, R.string.default_error, Snackbar.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                            database
+                                                    .child("users")
+                                                    .child(FirebaseAuth.getInstance().getUid())
+                                                    .setValue(userItem)
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Snackbar.make(view, R.string.default_error, Snackbar.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
+                                            NetworkUsers.addUser(FirebaseAuth.getInstance().getUid());
+                                        }
+                                        else {
+                                            Toast.makeText(getContext(), "Имя пользователя и адрес не могут быть пустыми!", Toast.LENGTH_SHORT).show();
+                                        }
 
                                     } else {//old user
-                                        Map<String, Object> updates = new HashMap<>();
+                                        if (!profileAddress.getText().toString().equals("") && !profileNameEt.getText().toString().equals("")) {
+                                            Map<String, Object> updates = new HashMap<>();
 
-                                        updates.put("name", profileNameEt.getText().toString());
-                                        updates.put("address", profileAddress.getText().toString());
+                                            updates.put("name", profileNameEt.getText().toString().replace("\n", ""));
+                                            updates.put("address", profileAddress.getText().toString().replace("\n", ""));
 
-                                        database
-                                                .child("users")
-                                                .child(FirebaseAuth.getInstance().getUid())
-                                                .updateChildren(updates)
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Snackbar.make(view, R.string.default_error, Snackbar.LENGTH_SHORT).show();
-                                                    }
-                                                })
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        Snackbar.make(view, R.string.edit_profile_success, Snackbar.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                            database
+                                                    .child("users")
+                                                    .child(FirebaseAuth.getInstance().getUid())
+                                                    .updateChildren(updates)
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Snackbar.make(view, R.string.default_error, Snackbar.LENGTH_SHORT).show();
+                                                        }
+                                                    })
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            Snackbar.make(view, R.string.edit_profile_success, Snackbar.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                        else {
+                                            Toast.makeText(getContext(), "Имя пользователя и адрес не могут быть пустыми!", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
 
@@ -206,7 +221,12 @@ public class ProfileFragment extends Fragment {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left,
+                                R.anim.enter_left_to_right, R.anim.exit_left_to_right)
+                        .replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
+
+                Toast.makeText(getContext(), "Чтобы завершить регистрацию, введите Ваши имя и адрес.", Toast.LENGTH_LONG).show();
             } else {
                 // Sign in failed
                 if (response == null) {
@@ -240,5 +260,45 @@ public class ProfileFragment extends Fragment {
                                 phoneLoginConfig))
                         .build(),
                 LOGIN_REQUEST_CODE);
+    }
+
+    @Override
+    public void onResultCode(Integer resultCode) {
+
+    }
+
+    @Override
+    public void onResult(UserTeamModel result) {
+        if (result != null)
+            NetworkUsers.getUserInfo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+    }
+
+    @Override
+    public void onResult(PointModel result) {
+        ratingText.setVisibility(View.VISIBLE);
+
+        if (result.place == null) {
+            ratingText.setText(getContext().getString(
+                    R.string.profile_rating_placeholder,
+                    "0",
+                    "0",
+                    "0"
+                    )
+            );
+        }
+        else {
+            ratingText.setText(getContext().getString(
+                    R.string.profile_rating_placeholder,
+                    result.place,
+                    result.place_m,
+                    result.point
+                    )
+            );
+        }
+    }
+
+    @Override
+    public void onResult(ResponseModel result) {
+        Log.i("SUCCESS ADDING USER", result.message);
     }
 }

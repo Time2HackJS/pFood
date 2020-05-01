@@ -1,6 +1,7 @@
 package com.example.pfood.Classes;
 
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,8 +36,6 @@ public class AppSettings {
 
     public FoodCategory clickedCategory;
     public Food clickedFood;
-    public ArrayList<FoodCategory> fcList = new ArrayList<>();
-    public ArrayList<Food> foodList = new ArrayList<>();
     public ArrayList<Food> foodCache = new ArrayList<>();
     public ArrayList<FoodCollectable> foodCart = new ArrayList<>();
     public TextView tvNum;
@@ -46,27 +45,32 @@ public class AppSettings {
     public TextView fullPrice;
     public ListView foodListView;
     public FoodAdapter foodAdapter;
+    public ArrayList<Order> orderList = new ArrayList<>();
+    public Order clickedOrder;
+    public ArrayList<String> chefIds = new ArrayList<>();
+    public ArrayList<String> courierIds = new ArrayList<>();
 
-    public void fillFood() {
+    public OrderAdapter orderAdapter;
 
+    public MenuItem menuItem;
 
+    public String latestTime;
+    public String earliestTime;
 
-        if (foodList.isEmpty() && fcList.isEmpty()) {
-//            foodList.add(new Food("С лососем", 350, "Здесь должно находиться очень много-много текста, который якобы с трудом будет влезать на этом маленьком экране моего не менее маленького смартфона.", 1, R.drawable.testimage_1));
-//            foodList.add(new Food("С авокадо", 250, "Рис и авокадо", 2, R.drawable.testimage_2));
-//            foodList.add(new Food("Филадельфия", 400, "Рис и рыба какая-то", 3, R.drawable.testimage_3));
-//            foodList.add(new Food("Калифорния", 300, "Рис и икра", 4, R.drawable.testimage_4));
+    public String contactPhone;
 
-//            fcList.add(new FoodCategory("Суши", 1, foodList, R.drawable.sushi));
-//
-//            fcList.add(new FoodCategory("Роллы", 2, foodList, R.drawable.rolls));
-//            fcList.add(new FoodCategory("Лапша", 3, foodList, R.drawable.nooddles));
-        }
-    }
+    public ArrayList<FoodCollectable> orderCart = new ArrayList<>();
+
+    public Integer deliveryCost;
+    public Integer freeDeliveryCost;
+
+    public ArrayList<Team> teamList;
+
+    public TextView deliveryPrice;
 
     public FoodCollectable findFood(Integer id) {
         for (FoodCollectable food : foodCart) {
-            if (food.getId().equals(id)) {
+            if (food.getName().equals(id)) {
                 return food;
             }
         }
@@ -108,5 +112,25 @@ public class AppSettings {
                 break;
             }
         }
+    }
+
+    public Food findSingleFood(String name) {
+        Food result = new Food();
+
+        for (Food f : AppSettings.getInstance().foodCache) {
+            if (name.contains(f.getName())) result = f;
+        }
+
+        return result;
+    }
+
+    public Boolean isOrderContains(Food food) {
+        Boolean flag = false;
+
+        for (String s : AppSettings.getInstance().clickedOrder.getFoodCart()) {
+            if (s.contains(food.getName())) flag = true;
+        }
+
+        return flag;
     }
 }

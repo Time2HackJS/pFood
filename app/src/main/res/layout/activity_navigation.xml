@@ -28,6 +28,9 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
                 <RelativeLayout
+                    android:id="@+id/cart_container_rl"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:layout_width="150dp"
                     android:layout_height="56dp"
                     android:layout_gravity="end">
@@ -55,13 +58,13 @@
                         android:textStyle="bold"
                         android:textSize="17dp" />
 
-                    <ImageButton
+                    <ImageView
                         android:layout_marginLeft="100dp"
                         android:id="@+id/cart_button"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
-                        android:scaleY="1.4"
-                        android:scaleX="1.4"
+                        android:scaleY="0.7"
+                        android:scaleX="0.7"
                         android:src="@drawable/ic_cart_white"
                         android:background="@null"/>
                 </RelativeLayout>

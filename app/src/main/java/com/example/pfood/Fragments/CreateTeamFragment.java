@@ -1,6 +1,7 @@
 package com.example.pfood.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.pfood.Classes.AppUsers;
+import com.example.pfood.NetworkClasses.NetworkTeams;
+import com.example.pfood.NetworkClasses.NetworkUsers;
 import com.example.pfood.R;
+import com.example.pfood.ResponseModels.ResponseModel;
 import com.example.pfood.model.TeamItem;
 import com.example.pfood.model.UserItem;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,11 +30,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-public class CreateTeamFragment extends Fragment {
+public class CreateTeamFragment extends Fragment implements NetworkTeams.AddTeamCallback, NetworkUsers.AddUserToTeamCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_team, container, false);
+
+        NetworkTeams.onAddTeamCallback(this);
+        NetworkUsers.onAddUserToTeamCallback(this);
+
         Button saveButton = view.findViewById(R.id.save_team_btn);
         final EditText editText = view.findViewById(R.id.team_name_et);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +64,7 @@ public class CreateTeamFragment extends Fragment {
                         } else {
                             TeamItem teamItem = new TeamItem(
                                     userIdMap,
-                                    editText.getText().toString(),
+                                    editText.getText().toString().replace("\n", ""),
                                     0L,
                                     0L
                             );
@@ -84,9 +93,31 @@ public class CreateTeamFragment extends Fragment {
                     }
                 });
 
+                NetworkTeams.addTeam(editText.getText().toString(),
+                        FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        AppUsers.getInstance().currentUser.getInviteCode());
+
 
             }
         });
         return view;
+    }
+
+    @Override
+    public void onResultCode(Integer resultCode) {
+
+    }
+
+    @Override
+    public void onResult(ResponseModel result) {
+        Log.i("TEAM ADDING: ", result.count + " " + result.message);
+
+        NetworkUsers.addUserToTeam(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                AppUsers.getInstance().currentUser.getInviteCode());
+    }
+
+    @Override
+    public void onAddResult(ResponseModel result) {
+        Log.i("ADDED USER TO TEAM: ", result.count + " " + result.message);
     }
 }

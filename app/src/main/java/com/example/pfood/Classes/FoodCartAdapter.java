@@ -47,19 +47,16 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
         bAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getItem(position).setFoodCount(getItem(position).getFoodCount() + 1);
+                getItem(position).incCount();
+                AppSettings.getInstance().ivCircle.setVisibility(View.VISIBLE);
 
-                AppSettings.getInstance().fullNumPrice = 200;
-                for (FoodCollectable f : AppSettings.getInstance().foodCart) {
-                    AppSettings.getInstance().fullNumPrice += f.getFullPrice();
-                }
-
-                AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
                 AppSettings.getInstance().foodCount++;
 
                 Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.scale);
                 AppSettings.getInstance().tvNum.startAnimation(anim);
                 AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
+
+                checkPrice();
 
                 notifyDataSetChanged();
                 AppSettings.getInstance().foodAdapter.notifyDataSetChanged();
@@ -69,39 +66,21 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
         bRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getItem(position).setFoodCount(getItem(position).getFoodCount() - 1);
-
-                AppSettings.getInstance().fullNumPrice = 200;
-                for (FoodCollectable f : AppSettings.getInstance().foodCart) {
-                    AppSettings.getInstance().fullNumPrice += f.getFullPrice();
+                if (getItem(position).getFoodCount() >= 1) {
+                    getItem(position).decCount();
+                    AppSettings.getInstance().foodCount--;
                 }
-
-                AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
-                if (getItem(position).getFoodCount().equals(0)) {
-                    AppSettings.getInstance().foodCart.remove(getItem(position));
-                    AppSettings.getInstance().deleteCollectable(getItem(position));
-                }
-
-                AppSettings.getInstance().foodCount--;
 
                 Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.scale_remove);
                 AppSettings.getInstance().tvNum.startAnimation(anim);
                 AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
-                if (AppSettings.getInstance().foodCount.equals(0)) {
-                    AppSettings.getInstance().tvNum.setVisibility(View.INVISIBLE);
+                if (AppSettings.getInstance().fullNumPrice == 0) {
+                    AppSettings.getInstance().tvNum.setText("");
                     AppSettings.getInstance().ivCircle.setVisibility(View.INVISIBLE);
                 }
 
-                if (!AppSettings.getInstance().foodCart.isEmpty()) {
-                    ViewGroup.LayoutParams lp = AppSettings.getInstance().foodListView.getLayoutParams();
-                    lp.height = 322 * AppSettings.getInstance().foodCart.size();
-                    AppSettings.getInstance().foodListView.setLayoutParams(lp);
-                }
-                else {
-                    ViewGroup.LayoutParams lp = AppSettings.getInstance().foodListView.getLayoutParams();
-                    AppSettings.getInstance().foodListView.setVisibility(View.GONE);
-                }
+                checkPrice();
 
                 notifyDataSetChanged();
                 AppSettings.getInstance().foodAdapter.notifyDataSetChanged();
@@ -112,10 +91,22 @@ public class FoodCartAdapter extends ArrayAdapter<FoodCollectable> {
         tvCount.setText(Integer.toString(count));
         tvPrice.setText(fullPrice + "\u20BD");
         Glide.with(imageView).load(imageUrl).into(imageView);
-        AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
-
+        checkPrice();
 
         return convertView;
+    }
+
+    public void checkPrice() {
+        if (AppSettings.getInstance().deliveryPrice != null && AppSettings.getInstance().fullNumPrice > AppSettings.getInstance().freeDeliveryCost)
+        {
+            AppSettings.getInstance().fullPrice.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
+            AppSettings.getInstance().deliveryPrice.setText("Бесплатно");
+        }
+        else
+        {
+            AppSettings.getInstance().deliveryPrice.setText(AppSettings.getInstance().deliveryCost + " \u20BD");
+            AppSettings.getInstance().fullPrice.setText((AppSettings.getInstance().fullNumPrice + AppSettings.getInstance().deliveryCost) + " \u20BD");
+        }
     }
 }

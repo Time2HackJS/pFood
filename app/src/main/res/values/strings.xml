@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pFood</string>
+    <string name="app_name">Да! Хочу!</string>
     <string name="basket">Корзина</string>
     <string name="profile">Профиль</string>
     <string name="rating">Рейтинг</string>
@@ -23,7 +23,9 @@
     <string name="default_error">Произошла ошибка</string>
     <string name="edit_profile_success">Данные успешно сохранены</string>
     <string name="profile_title">Профиль</string>
-    <string name="profile_rating_placeholder">Ваше место в рейтинге: \n за всё времмя %s \n за месяц %s\nВаш рейтинг: %s</string>
+    <string name="profile_rating_placeholder">Ваше место в рейтинге: \n   За всё время: %s \n   За месяц: %s\nВаш рейтинг: %s</string>
     <string name="rating_my_team_button_text">Моя команда</string>
     <string name="fill_personal_data">Заполните профиль</string>
+    <string name="orders">Заказы</string>
+    <string name="rating_month">Рейтинг за месяц</string>
 </resources>

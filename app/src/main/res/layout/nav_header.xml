@@ -8,21 +8,38 @@
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Наши контакты:" />
+
+        <TextView
+            android:id="@+id/contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8-999-924-45-02" />
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/header_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="Здесь будет что-то"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:text="Пользователь"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"/>
 
     <TextView
+        android:id="@+id/header_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="И здесь будет что-то" />
+        android:text="Телефон"
+        android:textSize="15sp"/>
 
 </LinearLayout>

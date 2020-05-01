@@ -26,8 +26,8 @@ import com.example.pfood.R;
 public class DescriptionFragment extends Fragment {
 
     private View rootView;
-    private ImageView foodImage;
-    private TextView foodName, foodPrice, foodDescription;
+    private ImageView foodImage, foodAction;
+    private TextView foodName, foodPrice, foodDescription, foodProducts, foodActionPercent;
     private Button addButton;
 
 
@@ -43,10 +43,20 @@ public class DescriptionFragment extends Fragment {
         foodPrice = rootView.findViewById(R.id.foodPrice);
         foodDescription = rootView.findViewById(R.id.foodDescription);
         addButton = rootView.findViewById(R.id.addToCart);
+        foodProducts = rootView.findViewById(R.id.foodProducts);
+        foodAction = rootView.findViewById(R.id.food_action);
+        foodActionPercent = rootView.findViewById(R.id.food_action_percent);
+
+        if (!AppSettings.getInstance().clickedFood.getSale()) {
+            foodAction.setVisibility(View.GONE);
+            foodActionPercent.setText("");
+        }
+
         Glide.with(foodImage).load(AppSettings.getInstance().clickedFood.getImageUrl()).into(foodImage);
         foodName.setText(AppSettings.getInstance().clickedFood.getName());
 
         foodPrice.setText(AppSettings.getInstance().clickedFood.getPrice() + "\u20BD");
+        foodProducts.setText(AppSettings.getInstance().clickedFood.getProducts());
 
         foodDescription.setText(AppSettings.getInstance().clickedFood.getDescription());
 
@@ -55,11 +65,11 @@ public class DescriptionFragment extends Fragment {
         ImageButton bAdd = rootView.findViewById(R.id.button_add);
         ImageButton bRemove = rootView.findViewById(R.id.button_remove);
 
-        if (AppSettings.getInstance().findFood(AppSettings.getInstance().clickedFood.getId()) != null
-                && AppSettings.getInstance().findFood(AppSettings.getInstance().clickedFood.getId()).getFoodCount() >= 1) {
+        if (AppSettings.getInstance().findCollectable(AppSettings.getInstance().clickedFood) != null
+                && AppSettings.getInstance().findCollectable(AppSettings.getInstance().clickedFood).getFoodCount() >= 1) {
             addButton.setVisibility(View.GONE);
             countControlContainer.setVisibility(View.VISIBLE);
-            tvCount.setText(AppSettings.getInstance().findFood(AppSettings.getInstance().clickedFood.getId()).getFoodCount().toString());
+            tvCount.setText(AppSettings.getInstance().findCollectable(AppSettings.getInstance().clickedFood).getFoodCount().toString());
         }
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +97,6 @@ public class DescriptionFragment extends Fragment {
                 AppSettings.getInstance().tvNum.startAnimation(anim);
                 AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
 
-                Log.i("DB FOOD CHECK", clickedFood.getName() + " " + AppSettings.getInstance().findFood(clickedFood_id).getFoodCount());
                 addButton.setVisibility(View.GONE);
                 countControlContainer.setVisibility(View.VISIBLE);
             }
@@ -97,29 +106,24 @@ public class DescriptionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Food clickedFood = AppSettings.getInstance().clickedFood;
-                Integer clickedFood_id = clickedFood.getId();
 
                 AppSettings.getInstance().foodCache.add(clickedFood);
                 AppSettings.getInstance().foodCount++;
 
-                if (AppSettings.getInstance().findFood(clickedFood_id) == null) {
+                if (AppSettings.getInstance().findCollectable(clickedFood) == null) {
                     AppSettings.getInstance().foodCart.add(
                             new FoodCollectable(clickedFood, 1));
                 } else {
-                    AppSettings.getInstance().findFood(clickedFood_id)
-                            .setFoodCount(AppSettings.getInstance().findFood(clickedFood_id).getFoodCount() + 1);
-                    tvCount.setText(AppSettings.getInstance().findFood(clickedFood_id).getFoodCount().toString());
+                    AppSettings.getInstance().findCollectable(clickedFood).incCount();
+                    tvCount.setText(AppSettings.getInstance().findCollectable(clickedFood).getFoodCount().toString());
                 }
 
                 AppSettings.getInstance().tvNum.setVisibility(View.VISIBLE);
                 AppSettings.getInstance().ivCircle.setVisibility(View.VISIBLE);
 
-                AppSettings.getInstance().fullNumPrice += clickedFood.getPrice();
                 Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.scale);
                 AppSettings.getInstance().tvNum.startAnimation(anim);
                 AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
-
-                Log.i("DB FOOD CHECK", clickedFood.getName() + " " + AppSettings.getInstance().findFood(clickedFood_id).getFoodCount());
             }
         });
 
@@ -127,28 +131,39 @@ public class DescriptionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Food clickedFood = AppSettings.getInstance().clickedFood;
-                Integer clickedFood_id = clickedFood.getId();
 
-                if (AppSettings.getInstance().findFood(clickedFood_id) != null) {
-                    if (AppSettings.getInstance().findFood(clickedFood_id).getFoodCount() > 0) {
-                        AppSettings.getInstance().findFood(clickedFood_id)
-                                .setFoodCount(AppSettings.getInstance().findFood(clickedFood_id).getFoodCount() - 1);
+                if (AppSettings.getInstance().findCollectable(clickedFood) != null) {
+                    if (AppSettings.getInstance().findCollectable(clickedFood).getFoodCount() > 1) {
+                        AppSettings.getInstance().findCollectable(clickedFood)
+                                .decCount();
 
-                        AppSettings.getInstance().foodCache.remove(clickedFood);
                         AppSettings.getInstance().foodCount--;
 
                         AppSettings.getInstance().tvNum.setVisibility(View.VISIBLE);
                         AppSettings.getInstance().ivCircle.setVisibility(View.VISIBLE);
 
-                        AppSettings.getInstance().fullNumPrice -= clickedFood.getPrice();
+                        AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
                         Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.scale);
                         AppSettings.getInstance().tvNum.startAnimation(anim);
+
+                        tvCount.setText(AppSettings.getInstance().findCollectable(clickedFood).getFoodCount().toString());
+                    }
+                    else {
+                        AppSettings.getInstance().findCollectable(clickedFood).decCount();
+                        addButton.setVisibility(View.VISIBLE);
+                        countControlContainer.setVisibility(View.GONE);
+
                         AppSettings.getInstance().tvNum.setText(AppSettings.getInstance().fullNumPrice + " \u20BD");
-                        tvCount.setText(AppSettings.getInstance().findFood(clickedFood_id).getFoodCount().toString());
+
+                        if (AppSettings.getInstance().foodCart.isEmpty()) {
+                            AppSettings.getInstance().tvNum.setText("");
+                            AppSettings.getInstance().ivCircle.setVisibility(View.INVISIBLE);
+                        }
                     }
                 }
-
-                Log.i("DB FOOD CHECK", clickedFood.getName() + " " + AppSettings.getInstance().findFood(clickedFood_id).getFoodCount());
+                else {
+                    AppSettings.getInstance().findCollectable(clickedFood).decCount();
+                }
             }
         });
 
